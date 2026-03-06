@@ -2,20 +2,7 @@
 
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import {
-  ArrowRight,
-  Star,
-  Quote,
-  CheckCircle2,
-  Clock,
-  MapPin,
-  Phone,
-  Mail,
-  Calendar,
-  Users,
-  Heart,
-  Leaf,
-} from "lucide-react";
+import { ArrowRight, Star, Quote, CircleCheck as CheckCircle2, Clock, MapPin, Phone, Mail, Calendar, Users, Heart, Leaf } from "lucide-react";
 import Link from "next/link";
 
 const fadeIn = {
