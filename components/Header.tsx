@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import { Phone, MessageCircle, ArrowUpRight } from "lucide-react";
 
@@ -41,11 +42,21 @@ export default function Header() {
             {/* --- LOGO --- */}
             <Link
               href="/"
-              className={`text-2xl font-serif italic tracking-tighter transition-colors duration-500 ${
+              className={`flex items-center gap-3 text-2xl font-  tracking-tighter transition-colors duration-500 ${
                 isScrolled ? "text-white" : "text-slate-900"
               }`}
             >
-              Swashthika<span className="text-emerald-500">.</span>
+              <span className="relative h-12 w-12 overflow-hidden rounded-full border border-white/10 bg-white/90 shadow-sm">
+                <Image
+                  src="/Logo.jpeg"
+                  alt="Swashthika logo"
+                  fill
+                  sizes="48px"
+                  className="object-cover"
+                  priority
+                />
+              </span>
+              Yogic Hours<span className="text-emerald-500">.</span>
             </Link>
 
             {/* --- CENTER NAVIGATION (DESKTOP) --- */}

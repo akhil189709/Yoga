@@ -4,290 +4,220 @@ import React from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
   Check,
-  MapPin,
   Monitor,
-  Zap,
   ArrowUpRight,
-  Infinity as InfinityIcon,
   Compass,
   Wind,
+  Plus,
 } from "lucide-react";
 import Link from "next/link";
 
-// Animation Variants - Silk Smooth
-const silkFadeUp = {
-  hidden: { opacity: 0, y: 40 },
+// Animation Variants - High End Reveal
+const revealUp = {
+  hidden: { opacity: 0, y: 60 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] as const },
+    transition: { duration: 1.4, ease: [0.16, 1, 0.3, 1] },
   },
 };
 
 const stagger = {
-  visible: { transition: { staggerChildren: 0.1 } },
+  visible: { transition: { staggerChildren: 0.15 } },
 };
 
 export default function Services() {
   const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], [0, -200]);
+  const titleY = useTransform(scrollYProgress, [0, 1], [0, -300]);
 
   return (
-    <main className="bg-[#FAF9F6] text-[#121212] font-sans antialiased overflow-hidden selection:bg-emerald-200">
-      {/* --- HERO: MINIMALIST EDITORIAL --- */}
-      <section className="relative min-h-[80vh] flex items-center px-6 md:px-24 overflow-hidden border-b border-black/5">
+    <main className="bg-[#FCFAF7] text-slate-950 font-sans antialiased selection:bg-amber-100">
+      
+      {/* --- HERO: THE EDITORIAL HEADER --- */}
+      <section className="relative min-h-[90vh] flex items-center px-6 md:px-24 overflow-hidden border-b border-slate-100">
         <div className="max-w-7xl mx-auto w-full relative z-10 pt-20">
           <motion.div initial="hidden" animate="visible" variants={stagger}>
-            <motion.span
-              variants={silkFadeUp}
-              className="uppercase tracking-[0.8em] text-[9px] font-black text-emerald-800 mb-8 block"
-            >
-              Curated Alchemy
-            </motion.span>
+            <motion.div variants={revealUp} className="flex items-center gap-4 mb-10">
+              <span className="w-12 h-[1px] bg-amber-600" />
+              <span className="uppercase tracking-[0.6em] text-[10px] font-black text-amber-700">
+                The Curriculum
+              </span>
+            </motion.div>
 
             <motion.h1
-              variants={silkFadeUp}
-              className="text-5xl md:text-8xl font-serif italic tracking-tighter leading-none mb-12 max-w-4xl"
+              variants={revealUp}
+              className="text-6xl md:text-[10rem] font-bold tracking-tighter leading-[0.85] mb-16"
             >
-              Elevated{" "}
-              <span className="not-italic text-black/10">
-                Practices for the
-              </span>{" "}
-              <br />
-              Modern Soul<span className="text-emerald-600">.</span>
+              Elevated <br />
+              <span className="font-serif italic font-light text-amber-600">Practices.</span>
             </motion.h1>
 
             <motion.div
-              variants={silkFadeUp}
-              className="flex flex-col md:flex-row items-start md:items-end justify-between gap-12"
+              variants={revealUp}
+              className="flex flex-col md:flex-row items-start justify-between gap-12"
             >
-              <p className="text-slate-500 font-light text-xl md:text-2xl max-w-xl leading-relaxed italic border-l border-emerald-200 pl-8">
-                "Precision in movement. Stillness in mind. We facilitate the
-                return to your essential architecture."
-              </p>
-
-              <div className="flex gap-4 items-center group cursor-pointer">
-                <div className="w-12 h-12 rounded-full border border-black/10 flex items-center justify-center group-hover:bg-black group-hover:text-white transition-all duration-500">
-                  <Wind size={18} />
-                </div>
-                <span className="text-[10px] uppercase tracking-[0.4em] font-bold">
-                  Discover More
-                </span>
+              <div className="max-w-xl">
+                 <p className="text-slate-400 font-bold text-xs uppercase tracking-[0.3em] mb-4">Our Philosophy</p>
+                 <p className="text-slate-600 text-xl md:text-2xl leading-relaxed font-medium">
+                  We blend biometric precision with ancient stillness to help you 
+                  return to your <span className="text-slate-950 underline decoration-amber-500 underline-offset-8">essential architecture</span>.
+                </p>
               </div>
+
+              <motion.div whileHover={{ scale: 1.05 }} className="group cursor-pointer flex items-center gap-6 bg-slate-950 text-white pl-8 pr-4 py-4 rounded-full">
+                <span className="text-[10px] uppercase tracking-[0.3em] font-black">Scroll to Explore</span>
+                <div className="w-10 h-10 rounded-full bg-amber-600 flex items-center justify-center group-hover:rotate-45 transition-transform">
+                  <ArrowUpRight size={18} />
+                </div>
+              </motion.div>
             </motion.div>
           </motion.div>
         </div>
 
-        {/* Parallax Floating Element */}
+        {/* Large Decorative Parallax Text */}
         <motion.div
-          style={{ y }}
-          className="absolute right-[-5%] top-[20%] text-[25vw] font-serif italic text-black/[0.02] -z-0 select-none whitespace-nowrap"
+          style={{ y: titleY }}
+          className="absolute right-[-10%] top-[30%] text-[20vw] font-black text-slate-900/[0.03] -z-0 select-none whitespace-nowrap pointer-events-none"
         >
-          The Method
+          CURATED
         </motion.div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-32">
-        {/* --- SECTION 1: THE PRIVÉ COLLECTION --- */}
-        <section className="mb-60">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-24 gap-8">
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-emerald-600" />
-                <span className="text-[10px] uppercase tracking-[0.5em] font-black text-slate-400">
-                  Offline Privé
-                </span>
-              </div>
-              <h2 className="text-4xl md:text-5xl font-serif italic tracking-tight">
-                The Physical Presence
-              </h2>
-            </div>
-            <p className="text-slate-400 text-xs uppercase tracking-[0.2em] max-w-[200px] leading-loose">
-              At-home sanctuaries & studio mastery in Bangalore.
+      {/* --- SECTION 1: OFFLINE PRIVÉ --- */}
+      <section className="py-32 md:py-48 max-w-7xl mx-auto px-6 md:px-12">
+        <div className="grid lg:grid-cols-12 gap-20 items-start">
+          <div className="lg:col-span-4 sticky top-32">
+            <span className="text-amber-600 font-black text-6xl opacity-10 font-serif">01</span>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mt-4 mb-8">
+              Offline <span className="italic font-serif font-light text-amber-600">Privé</span>
+            </h2>
+            <p className="text-slate-500 text-lg leading-relaxed mb-10">
+              Personalized sanctuaries in the heart of Bangalore. Our instructors come to your space, transforming it into a vessel for growth.
             </p>
+            <div className="flex items-center gap-4 text-slate-400">
+              <Plus size={16} className="text-amber-500" />
+              <span className="text-[10px] uppercase font-bold tracking-widest">Available in Bangalore & Mumbai</span>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="lg:col-span-8 space-y-6">
             {[
-              {
-                name: "Therapeutic Personal Training",
-                prices: ["₹12,000 / 12 Sessions", "₹1,500 / Trial"],
+              { 
+                title: "Therapeutic Personal Training", 
+                price: "₹12,000", 
+                tag: "12 Sessions",
+                desc: "Focused on structural correction and injury recovery." 
               },
-              {
-                name: "Home-Studio Synthesis",
-                prices: ["₹10,000 / 12 Sessions", "₹8,000 / 8 Sessions"],
+              { 
+                title: "Home-Studio Synthesis", 
+                price: "₹10,000", 
+                tag: "12 Sessions",
+                desc: "A rhythmic flow designed for daily lifestyle integration." 
               },
-            ].map((service, i) => (
+              { 
+                title: "Trial Consultation", 
+                price: "₹1,500", 
+                tag: "One Session",
+                desc: "Initial biometric assessment and practice mapping." 
+              }
+            ].map((item, i) => (
               <motion.div
                 key={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                className="group relative bg-white border border-black/[0.03] p-10 md:p-16 rounded-[3rem] hover:shadow-[0_40px_100px_-20px_rgba(0,0,0,0.08)] transition-all duration-700"
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                className="group bg-white p-10 rounded-[2.5rem] border border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-8 hover:shadow-2xl hover:shadow-slate-200 transition-all duration-500"
               >
-                <div className="flex flex-col h-full">
-                  <div className="flex justify-between items-start mb-16">
-                    <h3 className="text-3xl font-serif italic max-w-[200px] leading-tight group-hover:text-emerald-800 transition-colors">
-                      {service.name}
-                    </h3>
-                    <div className="text-right">
-                      {service.prices.map((p, idx) => (
-                        <p
-                          key={idx}
-                          className="text-lg font-serif italic text-slate-400 group-hover:text-emerald-600 transition-colors"
-                        >
-                          {p}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-
-                  <ul className="space-y-4 mb-12 flex-grow">
-                    {[
-                      "Biometric Assessment",
-                      "Anatomical Correction",
-                      "Private Concierge",
-                    ].map((feat, idx) => (
-                      <li
-                        key={idx}
-                        className="flex items-center gap-4 text-[11px] uppercase tracking-widest text-slate-400 font-bold border-b border-black/[0.03] pb-4"
-                      >
-                        <Check size={12} className="text-emerald-500" /> {feat}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Link
-                    href="/join"
-                    className="group/btn flex items-center justify-between w-full bg-black text-white px-8 py-6 rounded-full overflow-hidden relative"
-                  >
-                    <span className="text-[10px] uppercase tracking-[0.4em] font-black z-10">
-                      Request Invitation
-                    </span>
-                    <ArrowUpRight
-                      size={18}
-                      className="z-10 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform"
-                    />
-                    <div className="absolute inset-0 bg-emerald-700 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500" />
-                  </Link>
+                <div>
+                  <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-2 block">{item.tag}</span>
+                  <h3 className="text-2xl font-bold tracking-tight mb-2">{item.title}</h3>
+                  <p className="text-slate-400 text-sm max-w-xs">{item.desc}</p>
+                </div>
+                <div className="flex items-center gap-10">
+                   <div className="text-3xl font-light italic font-serif text-slate-950">{item.price}</div>
+                   <button className="w-14 h-14 rounded-2xl bg-slate-950 text-white flex items-center justify-center group-hover:bg-amber-600 transition-colors">
+                      <ArrowUpRight size={20} />
+                   </button>
                 </div>
               </motion.div>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* --- SECTION 2: DIGITAL BENTO --- */}
-        <section className="mb-60">
-          <div className="bg-black text-white rounded-[4rem] p-12 md:p-24 relative overflow-hidden">
-            {/* Glow effect */}
-            <div className="absolute bottom-0 left-0 w-[50%] h-[50%] bg-emerald-500/10 blur-[120px] rounded-full" />
+      {/* --- SECTION 2: THE DIGITAL BENTO --- */}
+      <section className="px-6 pb-48">
+        <div className="max-w-7xl mx-auto bg-slate-950 rounded-[4rem] p-12 md:p-24 relative overflow-hidden">
+          {/* Gold Glow */}
+          <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] bg-amber-600/10 blur-[120px] rounded-full" />
 
-            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-              <div className="lg:col-span-5">
-                <div className="flex items-center gap-4 mb-8">
-                  <Monitor
-                    className="text-emerald-400"
-                    size={20}
-                    strokeWidth={1}
-                  />
-                  <span className="text-[10px] uppercase tracking-[0.6em] text-emerald-400 font-bold">
-                    Virtual Studio
-                  </span>
-                </div>
-                <h2 className="text-5xl font-serif italic mb-8 leading-[1.1]">
-                  The Digital <br /> Collective.
-                </h2>
-                <p className="text-slate-400 text-lg font-light leading-relaxed mb-12">
-                  High-fidelity 4K streaming that bridges the gap between our
-                  sanctuary and your home. Bi-directional feedback for real-time
-                  correction.
-                </p>
-                <button className="text-[10px] uppercase tracking-[0.4em] font-black border-b border-emerald-500 pb-2 hover:text-emerald-400 transition-all">
-                  View Online Schedule
-                </button>
+          <div className="relative z-10 grid lg:grid-cols-2 gap-20 items-center">
+            <div>
+              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8">
+                <Monitor className="text-amber-500" size={16} />
+                <span className="text-[10px] uppercase tracking-[0.4em] text-white font-bold">Virtual Studio</span>
               </div>
+              <h2 className="text-5xl md:text-7xl font-bold text-white tracking-tighter mb-8">
+                The Digital <br /> <span className="italic font-serif font-light text-amber-500">Collective.</span>
+              </h2>
+              <p className="text-slate-400 text-lg font-medium leading-relaxed mb-12 max-w-md">
+                Experience high-fidelity 4K streaming that bridges the gap between our sanctuary and your home.
+              </p>
+              <button className="flex items-center gap-4 text-white group">
+                <span className="text-xs font-black uppercase tracking-widest border-b-2 border-amber-600 pb-2">View Schedule</span>
+                <ArrowUpRight size={20} className="text-amber-500 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
 
-              <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-6">
-                {[
-                  {
-                    name: "Global Group",
-                    price: "₹1,800",
-                    sub: "Mixed-level harmony",
-                  },
-                  {
-                    name: "Private Virtual",
-                    price: "₹2,800",
-                    sub: "1:1 Digital Intensive",
-                  },
-                ].map((item, i) => (
-                  <div
-                    key={i}
-                    className="bg-white/5 backdrop-blur-xl border border-white/10 p-10 rounded-[2.5rem] hover:bg-white/10 transition-all group"
-                  >
-                    <h4 className="text-2xl font-serif italic mb-2">
-                      {item.name}
-                    </h4>
-                    <div className="text-emerald-400 text-xl font-serif mb-6">
-                      {item.price}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               {[
+                 { name: "Global Group", price: "₹1,800", sessions: "Per Month", icon: <Compass /> },
+                 { name: "Private Virtual", price: "₹2,800", sessions: "1:1 Intensive", icon: <Wind /> }
+               ].map((card, i) => (
+                 <div key={i} className="bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-[3rem] hover:bg-white/10 transition-all cursor-pointer group">
+                    <div className="text-amber-500 mb-20 group-hover:scale-110 transition-transform origin-left">
+                      {React.cloneElement(card.icon as React.ReactElement, { size: 32, strokeWidth: 1 })}
                     </div>
-                    <p className="text-xs text-white/40 uppercase tracking-widest mb-10">
-                      {item.sub}
-                    </p>
-                    <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-emerald-500 group-hover:border-emerald-500 transition-all">
-                      <ArrowUpRight size={16} />
-                    </div>
-                  </div>
-                ))}
-              </div>
+                    <h4 className="text-2xl font-bold text-white mb-2">{card.name}</h4>
+                    <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest mb-6">{card.sessions}</p>
+                    <div className="text-2xl font-serif italic text-amber-500">{card.price}</div>
+                 </div>
+               ))}
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* --- SECTION 3: THE TRANSFORMATION --- */}
-        <section className="relative h-[80vh] flex items-center justify-center text-center">
-          <div className="absolute inset-0 z-0">
-            <img
-              src="https://images.unsplash.com/photo-1545208393-2165596273f2?auto=format&fit=crop&q=80&w=2000"
-              className="w-full h-full object-cover rounded-[4rem] grayscale opacity-20"
-              alt="Aesthetic Yoga"
-            />
-          </div>
+      {/* --- SECTION 3: FINAL CALL --- */}
+      <section className="py-32 text-center relative">
+        <div className="max-w-3xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="space-y-12"
+          >
+            <h2 className="text-5xl md:text-8xl font-bold tracking-tighter">
+              Ready to <span className="italic font-serif font-light text-amber-600">Evolve?</span>
+            </h2>
+            <p className="text-slate-500 text-lg uppercase tracking-[0.4em] font-bold max-w-xl mx-auto">
+              Applications now open for <br /> the 2026 private cohort.
+            </p>
+            <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
+              <Link
+                href="/contact"
+                className="bg-slate-950 text-white px-12 py-6 rounded-2xl text-[10px] uppercase tracking-[0.4em] font-black hover:bg-amber-600 transition-all shadow-2xl shadow-slate-200"
+              >
+                Start Application
+              </Link>
+              <button className="text-slate-950 text-[10px] uppercase tracking-[0.4em] font-black hover:text-amber-600 transition-colors">
+                Request Catalog →
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
-          <div className="relative z-10 space-y-12 px-6">
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 2 }}
-            >
-              <Compass
-                className="mx-auto mb-8 text-emerald-900"
-                size={40}
-                strokeWidth={1}
-              />
-              <h2 className="text-5xl md:text-7xl font-serif italic tracking-tighter mb-8">
-                Ready to evolve?
-              </h2>
-              <p className="text-slate-500 text-lg uppercase tracking-[0.4em] font-light max-w-xl mx-auto mb-12">
-                Applications now open for <br /> the 2026 private cohort.
-              </p>
-              <div className="flex flex-col md:flex-row gap-6 justify-center">
-                <Link
-                  href="/contact"
-                  className="bg-black text-white px-12 py-6 rounded-full text-[10px] uppercase tracking-[0.4em] font-black hover:bg-emerald-800 transition-all"
-                >
-                  Start Application
-                </Link>
-                <button className="bg-white text-black border border-black/10 px-12 py-6 rounded-full text-[10px] uppercase tracking-[0.4em] font-black hover:bg-slate-50 transition-all">
-                  Request Catalog
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-      </div>
-
-      <footer className="py-20 border-t border-black/[0.03] text-center">
-        <p className="text-[9px] uppercase tracking-[0.8em] text-slate-300 font-black">
+      <footer className="py-20 border-t border-slate-100 text-center">
+        <p className="text-[10px] uppercase tracking-[0.6em] text-slate-300 font-black">
           Swashthika • Private & Confidential • Bangalore
         </p>
       </footer>

@@ -1,188 +1,410 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import { scheduleData } from "@/data/schedule";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+} from "framer-motion";
+
 import {
   Clock,
   Globe,
   Sun,
   Sunrise,
   Sunset,
-  User,
   CheckCircle2,
   ArrowRight,
+  Sparkles,
+  Command,
 } from "lucide-react";
+
 import Link from "next/link";
 
-export default function Schedule() {
+
+
+/* ---------------- CURSOR GLOW ---------------- */
+
+function CursorGlow() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const handleMove = (e: React.MouseEvent) => {
+    if (!ref.current) return;
+
+    const { clientX, clientY } = e;
+
+    ref.current.style.background =
+      `radial-gradient(600px at ${clientX}px ${clientY}px, rgba(16,185,129,0.15), transparent 40%)`;
+  };
+
   return (
-    <main className="bg-[#FAF9F6] pt-32 pb-24 text-slate-900 font-sans antialiased min-h-screen">
-      <div className="max-w-[1400px] mx-auto px-8 md:px-12">
-        {/* --- HEADER --- */}
-        <section className="mb-20">
-          <span className="uppercase tracking-[0.4em] text-[10px] font-bold text-emerald-700 mb-4 block">
-            The Rhythm of Practice
-          </span>
-          <h1 className="text-5xl md:text-8xl font-serif italic tracking-tighter leading-none mb-8">
-            Class{" "}
-            <span className="not-italic font-sans font-light text-slate-400">
-              Schedule
-            </span>
-          </h1>
-          <p className="text-slate-500 font-light text-lg max-w-2xl leading-relaxed">
-            All group sessions are conducted online. Timings are listed in{" "}
-            <span className="font-medium text-slate-800">
-              IST (Indian Standard Time)
-            </span>{" "}
-            with primary global conversions for our international community.
-          </p>
+    <div
+      ref={ref}
+      onMouseMove={handleMove}
+      className="pointer-events-none fixed inset-0 z-10 transition"
+    />
+  );
+}
+
+
+
+/* ---------------- ANIMATION VARIANTS ---------------- */
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+const staggerContainer = {
+  visible: { transition: { staggerChildren: 0.12 } },
+};
+
+
+
+export default function Schedule() {
+
+  const containerRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+  });
+
+
+
+  return (
+    <main
+      ref={containerRef}
+      className="relative min-h-screen bg-[#FAF9F6] pt-32 pb-40 text-slate-900 overflow-hidden"
+    >
+
+      <CursorGlow />
+
+
+      {/* ---------------- AURORA BACKGROUND ---------------- */}
+
+      <div className="fixed inset-0 -z-50 overflow-hidden">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
+          className="absolute w-[140vw] h-[140vw] -top-[40%] -left-[20%]"
+        >
+          <div className="absolute w-full h-full bg-[conic-gradient(from_180deg_at_50%_50%,#10b98133,#6366f133,#ec489933,#10b98133)] blur-[140px]" />
+        </motion.div>
+
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#faf9f6_70%)]" />
+      </div>
+
+
+      {/* ---------------- SCROLL TIMELINE ---------------- */}
+
+      <motion.div
+        style={{ scaleY: smoothProgress }}
+        className="fixed left-10 top-0 w-[2px] h-full origin-top bg-gradient-to-b from-emerald-500 via-indigo-400 to-transparent z-20"
+      />
+
+
+      {/* ---------------- PARALLAX BACKGROUND BLOBS ---------------- */}
+
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+
+        <motion.div
+          style={{
+            scale: useTransform(smoothProgress, [0, 1], [1, 1.5]),
+            opacity: useTransform(smoothProgress, [0, 0.5], [0.1, 0]),
+          }}
+          className="absolute -top-[10%] -right-[10%] w-[70vw] h-[70vw] bg-emerald-100/40 rounded-full blur-[120px]"
+        />
+
+        <motion.div
+          style={{ y: useTransform(smoothProgress, [0, 1], [0, -200]) }}
+          className="absolute bottom-[-10%] left-[-5%] w-[50vw] h-[50vw] bg-stone-200/50 rounded-full blur-[100px]"
+        />
+
+      </div>
+
+
+
+      <div className="max-w-[1400px] mx-auto px-8 md:px-16 relative z-10">
+
+        {/* ---------------- HEADER ---------------- */}
+
+        <section className="mb-32">
+
+          <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
+
+            <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-6">
+              <span className="w-12 h-[1px] bg-emerald-800" />
+              <span className="uppercase tracking-[0.5em] text-[10px] font-bold text-emerald-800">
+                The Rhythm of Practice
+              </span>
+            </motion.div>
+
+
+            <motion.h1
+              variants={fadeInUp}
+              className="text-7xl md:text-9xl font-serif italic tracking-tighter leading-[0.85] mb-12"
+            >
+              Celestial <br />
+              <span className="not-italic font-sans font-extralight text-slate-300">
+                Alignment
+              </span>
+            </motion.h1>
+
+
+            <motion.div
+              variants={fadeInUp}
+              className="flex flex-col md:flex-row md:items-end justify-between gap-8"
+            >
+              <p className="text-slate-500 font-light text-xl max-w-xl leading-relaxed">
+                Our sessions follow the natural circadian rhythm,
+                synchronized with
+                <span className="text-slate-900 font-medium italic">
+                  {" "}Indian Standard Time
+                </span>.
+                Experience a global sanctuary from anywhere.
+              </p>
+
+
+              <div className="flex items-center gap-4 px-6 py-3 bg-white/50 backdrop-blur-md rounded-full border border-white shadow-sm">
+                <Globe size={18} className="text-emerald-700" />
+                <span className="text-xs uppercase tracking-widest font-bold text-slate-600">
+                  Syncing with GMT+5:30
+                </span>
+              </div>
+
+            </motion.div>
+
+          </motion.div>
+
         </section>
 
-        <div className="space-y-32">
-          {/* --- BATCH GROUPS --- */}
+
+
+        {/* ---------------- SCHEDULE SECTIONS ---------------- */}
+
+        <div className="space-y-48">
+
           {[
             {
-              title: "Morning Batches",
+              title: "Morning Radiance",
+              subtitle: "AWAKEN & VITALIZE",
               data: scheduleData.morningBatches,
-              icon: <Sunrise size={24} className="text-orange-400" />,
-              accent: "border-orange-100",
+              icon: <Sunrise size={32} strokeWidth={1} />,
+              color: "text-orange-500",
+              bg: "from-orange-50/50",
             },
             {
-              title: "Daytime Special",
+              title: "Zenith Flow",
+              subtitle: "BALANCE & CLARITY",
               data: scheduleData.daytimeBatches,
-              icon: <Sun size={24} className="text-emerald-500" />,
-              accent: "border-emerald-100",
+              icon: <Sun size={32} strokeWidth={1} />,
+              color: "text-emerald-600",
+              bg: "from-emerald-50/50",
             },
             {
-              title: "Evening Batches",
+              title: "Vesper Stillness",
+              subtitle: "RESTORE & REFLECT",
               data: scheduleData.eveningBatches,
-              icon: <Sunset size={24} className="text-indigo-400" />,
-              accent: "border-indigo-100",
+              icon: <Sunset size={32} strokeWidth={1} />,
+              color: "text-indigo-500",
+              bg: "from-indigo-50/50",
             },
           ].map((section, sIdx) => (
-            <section key={sIdx} className="relative">
-              <div className="flex items-center gap-4 mb-12">
-                <div className="p-3 bg-white rounded-2xl shadow-sm border border-slate-100">
-                  {section.icon}
-                </div>
-                <h2 className="text-2xl font-serif italic">{section.title}</h2>
-                <div className="h-[1px] flex-grow bg-slate-200 ml-4 hidden md:block" />
+
+            <motion.section
+              key={sIdx}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+              className="relative"
+            >
+
+
+              {/* SECTION TITLE */}
+
+              <div className="sticky top-32 z-20 mb-16 flex items-start">
+
+                <motion.div
+                  variants={fadeInUp}
+                  className="flex items-center gap-6 group"
+                >
+
+                  <div className={`p-5 bg-white rounded-full shadow-xl border border-white group-hover:scale-110 transition ${section.color}`}>
+                    {section.icon}
+                  </div>
+
+                  <div>
+                    <p className="text-[10px] tracking-[0.4em] font-bold text-slate-400 mb-1">
+                      {section.subtitle}
+                    </p>
+
+                    <h2 className="text-4xl md:text-5xl font-serif italic">
+                      {section.title}
+                    </h2>
+                  </div>
+
+                </motion.div>
+
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+
+              {/* CLASS CARDS */}
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
                 {section.data.map((batch, index) => (
-                  <div
+
+                  <motion.div
                     key={index}
-                    className={`group bg-white p-8 md:p-10 rounded-[2.5rem] border border-slate-100 hover:border-emerald-500/30 transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.05)]`}
+                    variants={fadeInUp}
+                    whileHover={{
+                      y: -14,
+                      rotateX: 6,
+                      rotateY: -6,
+                      scale: 1.02,
+                    }}
+                    transition={{ type: "spring", stiffness: 200 }}
+                    className="group relative overflow-hidden bg-white/30 backdrop-blur-2xl border border-white/40 p-10 md:p-14 rounded-[3rem] shadow-xl"
                   >
-                    <div className="flex flex-col md:flex-row justify-between items-start gap-6">
-                      <div className="space-y-4">
-                        <div className="flex items-center gap-2 text-emerald-700">
-                          <Clock size={16} />
-                          <span className="text-lg font-bold tracking-tight">
-                            {batch.time} IST
-                          </span>
+
+                    {/* glow */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-700 bg-gradient-to-r from-emerald-200/20 via-transparent to-indigo-200/20 blur-2xl" />
+
+
+                    <div className="relative z-10">
+
+                      <div className="flex flex-col sm:flex-row justify-between gap-8">
+
+                        <div className="space-y-6">
+
+                          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-slate-900 text-white">
+                            <Clock size={14} />
+                            <span className="text-sm">
+                              {batch.time} IST
+                            </span>
+                          </div>
+
+                          <h3 className="text-3xl md:text-4xl font-serif">
+                            {batch.className}
+                          </h3>
+
+                          <p className="text-slate-500 text-lg">
+                            {batch.description}
+                          </p>
+
                         </div>
-                        <h3 className="text-2xl font-serif">
-                          {batch.className}
-                        </h3>
-                        <p className="text-slate-500 font-light text-sm leading-relaxed max-w-xs">
-                          {batch.description}
-                        </p>
+
+
+
+                        {/* TIMEZONE */}
+
+                        <div className="bg-white/60 backdrop-blur-md rounded-3xl p-8 border border-white/50 shadow-inner min-w-[220px]">
+
+                          <div className="flex items-center gap-2 mb-4 opacity-40">
+                            <Command size={12} />
+                            <span className="text-[10px] uppercase tracking-widest font-bold">
+                              World Clock
+                            </span>
+                          </div>
+
+                          <div className="space-y-3">
+
+                            {batch.timezones.map((tz, idx) => (
+                              <div key={idx} className="flex justify-between">
+                                <span className="text-[11px] text-slate-400">
+                                  {tz.split(" ")[0]}
+                                </span>
+
+                                <span className="text-[11px] font-bold">
+                                  {tz.split(" ").slice(1).join(" ")}
+                                </span>
+                              </div>
+                            ))}
+
+                          </div>
+
+                        </div>
+
                       </div>
 
-                      <div className="bg-slate-50 rounded-2xl p-6 min-w-[200px] group-hover:bg-emerald-50 transition-colors duration-500">
-                        <div className="flex items-center gap-2 mb-3 opacity-50">
-                          <Globe size={12} />
-                          <span className="text-[9px] uppercase tracking-widest font-bold">
-                            Global Timings
-                          </span>
-                        </div>
-                        <div className="space-y-2">
-                          {batch.timezones.map((tz, idx) => (
-                            <p
-                              key={idx}
-                              className="text-[11px] text-slate-600 font-medium tracking-tight"
-                            >
-                              {tz}
-                            </p>
-                          ))}
-                        </div>
-                      </div>
                     </div>
 
-                    {batch.note && (
-                      <div className="mt-8 pt-6 border-t border-slate-50 flex items-center gap-2 text-xs text-emerald-600 italic">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        {batch.note}
-                      </div>
-                    )}
-                  </div>
+                  </motion.div>
+
                 ))}
+
               </div>
-            </section>
+
+            </motion.section>
+
           ))}
 
-          {/* --- PERSONAL CLASSES (THE VIP SECTION) --- */}
-          <section className="bg-slate-900 rounded-[3rem] p-10 md:p-20 text-white overflow-hidden relative">
-            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div className="space-y-8">
-                <div className="inline-flex items-center gap-2 bg-emerald-500/10 text-emerald-400 px-4 py-2 rounded-full border border-emerald-500/20">
-                  <User size={14} />
-                  <span className="text-[10px] uppercase tracking-[0.2em] font-bold">
-                    Bespoke Wellness
-                  </span>
-                </div>
-                <h2 className="text-4xl md:text-6xl font-serif italic leading-tight">
-                  Personal 1-to-1 <br />
-                  <span className="not-italic text-slate-400">Sanctuary</span>
-                </h2>
-                <p className="text-slate-400 font-light text-lg leading-relaxed">
-                  Fully flexible, appointment-based sessions designed for those
-                  seeking therapy, intensive weight management, or a private
-                  practice environment.
-                </p>
-                <Link
-                  href="/join"
-                  className="inline-flex items-center gap-4 bg-white text-slate-900 px-8 py-4 rounded-full group hover:bg-emerald-500 hover:text-white transition-all duration-500"
-                >
-                  <span className="text-xs uppercase tracking-widest font-bold">
-                    Request Private Slot
-                  </span>
-                  <ArrowRight
-                    size={16}
-                    className="group-hover:translate-x-1 transition-transform"
-                  />
-                </Link>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  "Gentle Restorative",
-                  "Therapeutic Yoga",
-                  "Women's Wellness",
-                  "Weight Management",
-                  "Deep Relaxation",
-                  "Advanced Postures",
-                ].map((type, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-3 bg-white/5 border border-white/10 p-4 rounded-2xl hover:bg-white/10 transition-colors"
-                  >
-                    <CheckCircle2 size={16} className="text-emerald-500" />
-                    <span className="text-sm font-light tracking-wide">
-                      {type}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Background Decoration */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] -mr-48 -mt-48" />
-          </section>
         </div>
       </div>
+
+
+
+      {/* ---------------- FOOTER CTA ---------------- */}
+
+      <footer className="mt-40 text-center px-8">
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          className="space-y-8"
+        >
+
+          <p className="text-[10px] uppercase tracking-[0.5em] text-slate-400">
+            Ready to transform?
+          </p>
+
+          <h2 className="text-4xl md:text-6xl font-serif italic text-slate-800">
+            Your mat is waiting.
+          </h2>
+
+          <div className="flex justify-center gap-8">
+
+            <Link
+              href="/contact"
+              className="text-xs font-bold uppercase tracking-widest hover:text-emerald-700"
+            >
+              Instagram
+            </Link>
+
+            <Link
+              href="/contact"
+              className="text-xs font-bold uppercase tracking-widest hover:text-emerald-700"
+            >
+              WhatsApp
+            </Link>
+
+            <Link
+              href="/contact"
+              className="text-xs font-bold uppercase tracking-widest hover:text-emerald-700"
+            >
+              Join Community
+            </Link>
+
+          </div>
+
+        </motion.div>
+
+      </footer>
+
     </main>
   );
 }
